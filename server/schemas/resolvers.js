@@ -23,6 +23,17 @@ const resolvers = {
                 .populate("friends")
                 .populate("thoughts");
         },
+        me: async (parent, args, context) => {
+            if (context.user) {
+            const userData = await User.findOne({})
+                .select("-__v -password")
+                .populate("friends")
+                .populate("thoughts");
+
+            return userData;
+            }
+            throw new AuthenticationError("Not logged in");
+        }
     },
     Mutation: {
         addUser: async (parent, args) => {
